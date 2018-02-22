@@ -5,17 +5,17 @@ import { state, signal } from 'cerebral/tags';
 import './MenuBar.css';
 import launcherIcon from './../../icons/launcher.png';
 import addRock from './../../icons/add.png';
-import findLocation from './../../icons/gps_found.png';
+import findLocation from './../../icons/gps_found.ico';
 import seeAll from './../../icons/eye_all_rocks.png';
 import seeUnpicked from './../../icons/eye_unpicked.png';
-import refresh from './../../icons/refresh.png';
 
 export default connect({
-  showAll: state`view.show_all_rocks`,
-  centerLocation: state`model.map_center_location`,
-  rockPickStatus: state`view.rock_pick_state`,
-  hideRockButtonClicked: signal`hideRockButtonClicked`,
-  addRockButtonClicked: signal`addRockButtonClicked`,
+                  showAll: state`view.show_all_rocks`,
+
+findLocationButtonClicked: signal`currentLocationButtonClicked`,
+    hideRockButtonClicked: signal`hideRockButtonClicked`,
+     addRockButtonClicked: signal`addRockButtonClicked`
+	,
 }, props =>
     <AppBar
       style={{backgroundColor: '#333333'}}
@@ -25,23 +25,23 @@ export default connect({
 	<div>
           <IconButton 
             tooltip="Add a Rock"
-            tooltipPosition="bottom-left">
-            <img src={addRock} width={60} height={60} />
+            tooltipPosition="bottom-left"
+	    onClick={() => props.addRockButtonClicked({})}>
+            <img src={addRock} width={40} height={40} />
           </IconButton>
+
           <IconButton
             tooltip="Find Location"
-            tooltipPosition="bottom-left">
-            <img src={findLocation} width={60} height={60} />
+            tooltipPosition="bottom-left"
+	    onClick = {() => props.findLocationButtonClicked({})}>
+            <img src={findLocation} width={40} height={40} />
           </IconButton>
+
           <IconButton
-            tooltip="See all Rocks"
-            tooltipPosition="bottom-left">
-            <img src={seeAll} width={60} height={60} />
-          </IconButton>
-          <IconButton
-            tooltip="Refresh Rocks"
-            tooltipPosition="bottom-left">
-            <img src={refresh} width={60} height={60} />
+            tooltip={props.showAll ? "See Unpicked Rocks" : "See All Rocks"}
+            tooltipPosition="bottom-left"
+	    onClick = {() => props.hideRockButtonClicked({})}>
+            <img src={props.showAll ? seeUnpicked : seeAll} width={40} height={40} />
           </IconButton>
         </div>
       }
