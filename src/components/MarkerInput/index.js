@@ -1,47 +1,40 @@
 import React from 'react';
 import { connect } from '@cerebral/react';
 import { state, signal } from 'cerebral/tags';
-import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
+import Drawer from 'material-ui/Drawer';
 //import './marker-input.css';
+import launcher from '../../icons/launcher.png';
 
 export default connect ({
   rockPickStatus: state`view.rock_pick_state`,
-  rockKey: state`model.selected_key`,
-  rocks: state`model.rocks`,
-  editMode: state`view.marker_edit_mode`,
+         rockKey: state`model.selected_key`,
+           rocks: state`model.rocks`,
+        editMode: state`view.marker_edit_mode`,
+	showAll: state`view.show_all_rocks`,
 
-  pickButtonClicked: signal`pickButtonClicked`,
+        pickButtonClicked: signal`pickButtonClicked`,
   commentInputTextChanged: signal`commentInputTextChanged`,
-  addComment: signal`addComment`,
-  deleteButtonClicked: signal`deleteButtonClicked`
-  },
-  props => {
-    console.log('editMode = ', props.editMode); 
-    const currock = (props.rocks && props.rockKey) ? props.rocks[props.rockKey] : { comments: '' };
+               addComment: signal`addComment`,
+      deleteButtonClicked: signal`deleteButtonClicked`
+  }, class MarkerInput extends React.Component {
+    render() {
+      const drawer = (
+        <Drawer
+	  variant="persistent"
+	  anchor="bottom"
+	  open={this.props.showAll}
+	>
+          <img src={launcher} />
+        </Drawer>
+      );
+      
+      return (
+        <div>
+          {drawer}
+        </div>
+      );
+    }
+  }
+   
   
-    /*if (!props.editMode) return '';
-    console.log('drawing edit panel...');*/
-    return (
-      <BottomNavigation>
-        <BottomNavigationItem>
-        </BottomNavigationItem>
-        /*<button
-          className={(!props.rockPickStatus) ? 'pick-button' : 'put-button'}
-          onClick={() => props.pickButtonClicked({ id: props.rockKey, picked: !props.rockPickStatus })}
-        />
-        <button
-          className={'delete-button'}
-          onClick={() => props.deleteButtonClicked({id: props.rockKey})}
-        />
-        <br /><br />
-        <input
-          type="text"
-          className={'comment-input'}
-          placeholder="Comments..."
-          value={currock.comments}
-          onChange={(e) => props.commentInputTextChanged({value:e.target.value})}
-          onKeyDown={(e) => {if (e.keyCode === 13 || e.keyCode === 9) {props.addComment({text: props.commentInput, id: props.rockKey})}}}
-        />*/
-    </BottomNavigation>
-  );
-});
+);

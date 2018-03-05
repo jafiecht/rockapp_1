@@ -4,7 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { connect } from '@cerebral/react';
 import MenuBar from '../MenuBar/';
 import MapContainer from '../Map/';
-//import MarkerInput from '../MarkerInput/';
+import MarkerInput from '../MarkerInput/';
 import './App.css';
 
 export default connect({
@@ -13,7 +13,7 @@ export default connect({
   <MuiThemeProvider>
     <MenuBar />
     <MapContainer />
-    {/*I'm planning to add Marker Input too*/}
+    <MarkerInput />
   </MuiThemeProvider>
 );
   
