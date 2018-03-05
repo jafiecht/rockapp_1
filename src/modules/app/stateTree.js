@@ -14,7 +14,7 @@ var stateTree = {
   view: {
     rock_pick_state: false,
     current_location_state: false,
-    marker_edit_mode: false,
+    marker_edit_mode: true,
     current_location_toggle: false,
     show_all_rocks: true,
   }

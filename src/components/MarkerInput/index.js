@@ -10,7 +10,6 @@ export default connect ({
          rockKey: state`model.selected_key`,
            rocks: state`model.rocks`,
         editMode: state`view.marker_edit_mode`,
-	showAll: state`view.show_all_rocks`,
 
         pickButtonClicked: signal`pickButtonClicked`,
   commentInputTextChanged: signal`commentInputTextChanged`,
@@ -22,7 +21,7 @@ export default connect ({
         <Drawer
 	  variant="persistent"
 	  anchor="bottom"
-	  open={this.props.showAll}
+	  open={this.props.editMode}
 	>
           <img src={launcher} />
         </Drawer>

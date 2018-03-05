@@ -9,42 +9,64 @@ import findLocation from './../../icons/gps_found.ico';
 import seeAll from './../../icons/eye_all_rocks.png';
 import seeUnpicked from './../../icons/eye_unpicked.png';
 
+const width=40;
+const height=40;
+
 export default connect({
-                  showAll: state`view.show_all_rocks`,
+   showAll: state`view.show_all_rocks`,
+  editMode: state`view.marker_edit_mode`,
 
-findLocationButtonClicked: signal`currentLocationButtonClicked`,
-    hideRockButtonClicked: signal`hideRockButtonClicked`,
-     addRockButtonClicked: signal`addRockButtonClicked`
+  findLocationButtonClicked: signal`currentLocationButtonClicked`,
+      hideRockButtonClicked: signal`hideRockButtonClicked`,
+       addRockButtonClicked: signal`addRockButtonClicked`
 	,
-}, props =>
-    <AppBar
-      style={{backgroundColor: '#333333'}}
-      title="RockApp"
-      iconElementLeft={ <img src={launcherIcon} /> }
-      iconElementRight={
-	<div>
-          <IconButton 
-            tooltip="Add a Rock"
+}, class MenuBar extends React.Component {
+    render() {
+
+      const normal = (
+        <div>
+	        <IconButton
+	          tooltip="Add a Rock"
+	           tooltipPosition="bottom-left"
+	           OnClick={() => this.addRockButtonClicked({})}>
+	           <img src={addRock} width={width} height={height} />
+	        </IconButton>
+
+	        <IconButton
+            tooltip="Find My Location"
             tooltipPosition="bottom-left"
-	    onClick={() => props.addRockButtonClicked({})}>
-            <img src={addRock} width={40} height={40} />
+	          onClick = {() => this.findLocationButtonClicked({})}>
+            <img src={findLocation} width={width} height={height} />
           </IconButton>
 
           <IconButton
-            tooltip="Find Location"
+            tooltip={this.showAll ? "See Only Unpicked Rocks" : "See All Rocks"}
             tooltipPosition="bottom-left"
-	    onClick = {() => props.findLocationButtonClicked({})}>
-            <img src={findLocation} width={40} height={40} />
-          </IconButton>
-
-          <IconButton
-            tooltip={props.showAll ? "See Unpicked Rocks" : "See All Rocks"}
-            tooltipPosition="bottom-left"
-	    onClick = {() => props.hideRockButtonClicked({})}>
-            <img src={props.showAll ? seeUnpicked : seeAll} width={40} height={40} />
+            onClick = {() => this.hideRockButtonClicked({})}>
+              <img src={this.showAll ? seeUnpicked : seeAll} width={width} height={height} />
           </IconButton>
         </div>
-      }
-   />
+      );
+
+      const editing = (
+        <div>
+          <IconButton
+            tooltip="Delete Rock?"
+            tooltipPosition="bottom-left">
+            <img src={launcherIcon} width={width} height={height}/>
+          </IconButton>
+        </div>
+      );
+
+      return (
+       <AppBar
+         style={{backgroundColor: '#333333'}}
+         title="RockApp"
+         iconElementLeft={ <img src={launcherIcon}/> }
+         iconElementRight={this.editMode ? editing : normal}
+       />
+      );
+    }
+  }
 );    
  
