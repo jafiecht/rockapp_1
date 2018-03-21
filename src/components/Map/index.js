@@ -8,6 +8,8 @@ import { Map, Marker, CircleMarker, TileLayer } from 'react-leaflet';
 import Paper from 'material-ui/Paper';
 import './Map.css';
 import MarkerInput from '../MarkerInput';
+import rockIcon from '../../icons/rock.png';
+import pickedRockIcon from '../../icons/pickedRock.png';
 
 const style = {
   height: 400,
@@ -71,12 +73,15 @@ export default connect({
       }
       
       //Draw the rock markers
-      const rockIcon = Leaflet.icon({
-        iconUrl: 'rock,.png',
+      const unpickedRock = Leaflet.icon({
+        iconUrl: rockIcon,
         iconAnchor: [18, 50]
       });
-      
-      //I'll add the picked rock Icon later
+
+      const pickedRock = Leaflet.icon({
+        iconUrl: pickedRockIcon,
+        iconAncho: [18, 50] 	     
+      });
 
       const position = [40.4286882, -86.9137644];
       const rockMarkers= [];
@@ -87,8 +92,8 @@ export default connect({
               key={key}
               position={[rock.location.lat, rock.location.lng]}
               draggable={true}
-              icon={(rock.picked) ? rockIcon : rockIcon}
-              onDragEnd={(e) => this.props.markerDragged({id: key, lat: e.target._latlng.lat, lng: e.target_latlng.lng})}
+              icon={(rock.picked) ? pickedRock : unpickedRock}
+              onDragEnd={(e) => this.props.markerDragged({id: key, lat: e.target._latlng.lat, lng: e.target._latlng.lng})}
               onClick={(e) => this.props.rockClicked({id: key})}
               opacity={this.props.showAll || (!this.props.showAll && !rock.picked) ? 1.0 : 0.0}
             >

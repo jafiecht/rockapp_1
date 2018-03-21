@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 import { Container } from '@cerebral/react';
 import App from './components/App/';
 import controller from './controller';
-import './index.css';
+//import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 render(

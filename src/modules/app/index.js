@@ -15,6 +15,7 @@ import { addCommentText } from './chains';
 import { deleteRock } from './chains';
 import { displayDomainModal } from './chains';
 import { initSetMapCenter } from './chains';
+import { finishEdit } from './chains';
 
 export default Module(m => {
   return {
@@ -34,6 +35,7 @@ export default Module(m => {
       commentInputTextChanged: inputTextChanged,
       addComment: addCommentText,
       deleteButtonClicked: deleteRock,
+      doneButtonClicked: finishEdit
     }
   };
 });

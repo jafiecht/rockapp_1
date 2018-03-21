@@ -10,15 +10,15 @@ export const showEdit = [
 
 export const addRockLoc = [
   ({state,props}) => {
-    const id = uuid.v4();
+    const id = uuid.v4()
     state.set(`model.rocks.${id}`, {
       picked: false,
       comment: '',
-      location: { lat: props.lat, lng: props.lng },
+      location: {lat: props.lat, lng: props.lng}
     });
     return { id }; // this needs to be in props for showEdit
   },
-  ...showEdit,
+  //set(state`view.marker_edit_mode`, true),
 ];
 
 export const setNewRockLoc = [ 
@@ -59,7 +59,8 @@ export const setBounds = [
 ];
 
 export const inputTextChanged = [
-  set(state`model.comment_input`, props`value`),
+  //set(state`model.comment_input`, props`value`),
+  set(state`model.rocks.${props`id`}.comment`, props`value`)
 ];
 
 export const addCommentText = [
@@ -69,6 +70,12 @@ export const addCommentText = [
 export const deleteRock = [
   set(state`view.marker_edit_mode`, false),
   ({state,props}) => state.unset(`model.rocks.${props.id}`),
+  set(state`model.selected_key`, '')
+];
+
+export const finishEdit = [
+  set(state`view.marker_edit_mode`, false),
+  set(state`model.selected_key`, '')
 ];
 
 function setMapCenter({props, state}) {
