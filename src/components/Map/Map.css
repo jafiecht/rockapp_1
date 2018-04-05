@@ -1,1 +1,3 @@
-/*Im hoping to figure out how to format all of this*/
+:global .leaflet-container {
+  flex: 1;
+}

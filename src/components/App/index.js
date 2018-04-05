@@ -1,29 +1,42 @@
 import React from 'react';
-import Leaflet from 'leaflet';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { createMuiTheme } from 'material-ui/styles';
-import grey from 'material-ui/colors/grey';
-import deepOrange from 'material-ui/colors/deepOrange';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
 import { connect } from '@cerebral/react';
+
 import MenuBar from '../MenuBar/';
 import MapContainer from '../Map/';
 import MarkerInput from '../MarkerInput/';
-//import './App.css';
 
-const theme = createMuiTheme({
-  palette: {
-    type: 'dark',
-  },
+const styles = theme => ({
+ app: {
+    width: '100vw',
+		height: '100vh',
+		'background-color': 'grey',
+    display: 'flex',
+		'flex-direction': 'column',
+  }
 });
 
-export default connect({
+class App extends React.Component {
+  render() {
+    const { classes, theme } = this.props;
+
+    return (
+      
+				<div className={classes.app}>
+          <MenuBar/>
+          <MapContainer/>
+          <MarkerInput/>
+				</div>
+      
+			);
+  }
+}
+
+export default connect(
+  {
   },
-  props =>
-  <MuiThemeProvider theme={theme}>
-    <MenuBar />
-    <MapContainer />
-    <MarkerInput />
-  </MuiThemeProvider>
+  withStyles(styles, { withTheme: true })(App)
 );
   
 
