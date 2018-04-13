@@ -31,7 +31,6 @@ const styles = theme => ({
 });
 
 class RockMap extends React.Component {
-
   componentDidMount() {
     this.refs.map.leafletElement.locate()
     //Get initial center of the map
@@ -47,6 +46,9 @@ class RockMap extends React.Component {
 
   render() {
     const { classes, theme } = this.props;
+
+		const stateTreeLatitude = this.props.centerLocation.lat;
+		const stateTreeLongitude = this.props.centerLocation.lng;
 
     //Add Current Location Marker
     const currentMarker = [];
@@ -78,10 +80,11 @@ class RockMap extends React.Component {
 
     const pickedRock = Leaflet.icon({
       iconUrl: pickedRockIcon,
-      iconAncho: [18, 50] 	     
+      iconAnchor: [18, 50] 	     
     });
 
-    const position = [40.4286882, -86.9137644];
+    const position = [stateTreeLatitude, stateTreeLongitude];
+
     const rockMarkers= [];
     if (this.props.rocks) {
       _.map(this.props.rocks, (rock,key) => {
@@ -116,7 +119,7 @@ class RockMap extends React.Component {
           dragging={true}
           center={(this.props.currentToggle) ? this.props.centerLocation : position} 
           ref='map'
-          zoom={15}            
+          zoom={'16'}           
           onLocationfound={(e) => this.props.handleLocationFound({lat:e.latlng.lat, lng:e.latlng.lng})}
           onMoveend={moveEnd}
           >
@@ -144,6 +147,7 @@ export default connect({
       currentLoc: state`model.current_location`,
    currentToggle: state`view.current_location_toggle`,
   centerLocation: state`model.map_center_location`,
+	     zoomLevel: state`model.zoom`,
 
                  markerDragged: signal`markerDragged`,
            handleLocationFound: signal`handleLocationFound`,
@@ -151,7 +155,8 @@ export default connect({
   currentLocationButtonClicked: signal`currentLocationButtonClicked`,
                    rockClicked: signal`rockClicked`,
                    boundsFound: signal`boundsFound`,
-                 initSetCenter: signal`initSetCenter` 
+                 initSetCenter: signal`initSetCenter`,
+							handleZoomChange: signal`zoomChange`,
   },
   withStyles(styles, { withTheme: true })(RockMap)
 );

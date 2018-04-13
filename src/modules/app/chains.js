@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import uuid from 'uuid';
 import { set, toggle } from 'cerebral/operators';
-import { props, state } from 'cerebral/tags'
+import { props, state } from 'cerebral/tags';
+import { setStorage, getStorage } from '@cerebral/storage/operators';
 
 export const showEdit = [
   set(state`model.selected_key`, props`id`),
@@ -15,10 +16,9 @@ export const addRockLoc = [
       picked: false,
       comment: '',
       location: {lat: props.lat, lng: props.lng}
-    });
+    })
     return { id }; // this needs to be in props for showEdit
   },
-  //set(state`view.marker_edit_mode`, true),
 ];
 
 export const setNewRockLoc = [ 
@@ -48,6 +48,7 @@ export const getMapCenter = [
   setMapCenter,
   set(state`model.map_bounds`, props`bounds`),
   set(state`view.marker_edit_mode`, false),
+	set(state`view.current_location_toggle`, false),
 ];
 
 export const initSetMapCenter = [
@@ -58,14 +59,18 @@ export const setBounds = [
   set(state`model.map_bounds`, props`bounds`),
 ];
 
+export const updateZoom = [
+  set(state`model.zoom`, props`zoom`),
+];
+
 export const inputTextChanged = [
   //set(state`model.comment_input`, props`value`),
   set(state`model.rocks.${props`id`}.comment`, props`value`)
 ];
 
-export const addCommentText = [
+/*export const addCommentText = [
   ({state,props}) => state.set(state`model.rocks.${props.id}.comments`, props.text),
-];
+];*/
 
 export const deleteRock = [
   set(state`view.marker_edit_mode`, false),
@@ -82,12 +87,17 @@ function setMapCenter({props, state}) {
   state.set('model.map_center_location', { lat: props.lat, lng: props.lng });
 };
 
-function setPicked({state, path}) {
+/*function setPicked({state, path}) {
   const selectedRock = state.get('model.selected_key');
   const picked = state.get('model.rocks'+selectedRock+'.picked');
   state.set('model.rocks'+selectedRock+'.picked', !picked);
   state.set('view.rock_pick_state', !picked);
   return {id: selectedRock}
-};
+};*/
 
-
+export const importFromCache = [
+  //getStorage('local.rocks'),
+	//function importRocks({props}){
+	//  {props.value ? set(state`model.rocks`, props.value) : null }
+	//}
+];

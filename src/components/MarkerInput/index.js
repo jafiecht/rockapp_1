@@ -11,21 +11,17 @@ import IconButton from 'material-ui/IconButton';
 //import './marker-input.css';
 import pickUp from '../../icons/rock_pick_up.png';
 import putDown from '../../icons/rock_put_down.png';
+import check from '../../icons/check.png';
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-	},
-  drawer: {
-    color: 'primary',	
-  },
-  flex: {
-    flex: 1,
+	icons: {
+    height: 4*theme.spacing.unit,
+    width: 4*theme.spacing.unit,
   },
 	buttons: {
-    height: theme.spacing.unit*4,
-    width: theme.spacing.unit*4,
-  },
+	  marginLeft: theme.spacing.unit,
+		marginRight: theme.spacing.unit,
+	},
 });
 
 class MarkerInput extends React.Component {
@@ -40,34 +36,30 @@ class MarkerInput extends React.Component {
 
     const currock = (this.props.rocks && this.props.rockKey) ? this.props.rocks[this.props.rockKey] : { comment: '' };
 
-    const drawer = (
+    return (
       <Drawer
-        className={classes.drawer}
         variant="persistent"
 	      anchor="bottom"
 	      open={this.props.editMode}>
         <Toolbar>
-          <Button variant="raised" onClick={() => this.props.doneButtonClicked({})}>
-            Finish
-          </Button>
+          <IconButton
+					  className={classes.buttons}
+					  onClick={() => this.props.doneButtonClicked({})}>
+            <img src={check} className={classes.icons}/>
+          </IconButton>
           <TextField
-            className={classes.flex}
+						fullWidth
 	          label="Comment Below"
             value={currock.comment}
             onChange={(e) => this.props.commentInputTextChanged({value: e.target.value, id: this.props.rockKey }) }
           />
 	        <IconButton
+					  className={classes.buttons}
 	          onClick={() => this.props.pickButtonClicked({id: this.props.rockKey, picked: !this.props.rockPickStatus})}>
-            <img src={this.props.rockPickStatus ? putDown : pickUp} className={classes.buttons}/>
+            <img src={this.props.rockPickStatus ? putDown : pickUp} className={classes.icons}/>
           </IconButton>
         </Toolbar>
       </Drawer>
-    );
-      
-    return (
-      <div className={classes.root}>
-        {drawer}
-      </div>
     );
   }
 }

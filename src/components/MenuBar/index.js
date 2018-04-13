@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 //import classNames from 'classNames';
-import { withStyles } from 'material-ui/styles';
+import { withStyles, MuiThemeProvider, createMuiTheme, withTheme } from 'material-ui/styles';
 import { AppBar, IconButton, Typography, Toolbar } from 'material-ui';
 import { connect } from '@cerebral/react';
 import { state, signal } from 'cerebral/tags';
@@ -14,13 +14,30 @@ import seeAll from './../../icons/eye_all_rocks.png';
 import seeUnpicked from './../../icons/eye_unpicked.png';
 import deleteIcon from './../../icons/delete.png';
 
+const theme = createMuiTheme({
+  pallete: {
+	  primary: {
+		  light: '#718792',
+		  main: '#455a64',
+      dark: '#1c313a',
+			contrastText: '#ffffff',
+		},
+		secondary: {
+      light: '#896a60',
+      main: '#5b3f36',
+      dark: '#301810',
+      contrastText: '#ffffff',
+	  },
+	},
+});
+
 const styles = theme => ({
 	flex: {
     flex: 1,
   },
   appbar: {
-    
-    height: 8*theme.spacing.unit,
+    //color: theme.pallete.primary.main,
+    //height: 8*theme.spacing.unit,
   },
 	appIcon: {
     marginLeft: -1.5*theme.spacing.unit,
@@ -86,17 +103,19 @@ class MenuBar extends React.Component {
     }
 
     return (
-      <AppBar position='static' className={classes.appbar}>
+		  <MuiThemeProvider theme={theme}>
+      <AppBar position='static' color='primary'>
         <Toolbar>
           <img src={launcherIcon} className={classes.appIcon}/>
           <Typography variant="title" color="inherit" className={classes.flex}>
             RockApp
           </Typography>
-					<Typography gutterBottom align="right">
+					<Typography>
             {icons}
 					</Typography>
         </Toolbar>
       </AppBar>
+			</MuiThemeProvider>
     );
   }
 }
@@ -109,8 +128,8 @@ export default connect({
 
   findLocationButtonClicked: signal`currentLocationButtonClicked`,
       hideRockButtonClicked: signal`hideRockButtonClicked`,
-        deleteButtonClicked: signal`deleteButtonClicked`,
+        deleteButtonClicked: signal`deleiteButtonClicked`,
        addRockButtonClicked: signal`addRockButtonClicked`
   }, 
-  withStyles(styles, { withTheme: true})(MenuBar)
+  withStyles(styles, {withTheme: false})(MenuBar)
 );
