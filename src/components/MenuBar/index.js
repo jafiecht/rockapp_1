@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 //import classNames from 'classNames';
-import { withStyles, MuiThemeProvider, createMuiTheme, withTheme } from 'material-ui/styles';
+import { withStyles, withTheme } from 'material-ui/styles';
 import { AppBar, IconButton, Typography, Toolbar } from 'material-ui';
 import { connect } from '@cerebral/react';
 import { state, signal } from 'cerebral/tags';
@@ -14,24 +14,10 @@ import seeAll from './../../icons/eye_all_rocks.png';
 import seeUnpicked from './../../icons/eye_unpicked.png';
 import deleteIcon from './../../icons/delete.png';
 
-const theme = createMuiTheme({
-  pallete: {
-	  primary: {
-		  light: '#718792',
-		  main: '#455a64',
-      dark: '#1c313a',
-			contrastText: '#ffffff',
-		},
-		secondary: {
-      light: '#896a60',
-      main: '#5b3f36',
-      dark: '#301810',
-      contrastText: '#ffffff',
-	  },
-	},
-});
-
 const styles = theme => ({
+  root: {
+		backgroundColor: '#1c313a',
+	},
 	flex: {
     flex: 1,
   },
@@ -103,8 +89,7 @@ class MenuBar extends React.Component {
     }
 
     return (
-		  <MuiThemeProvider theme={theme}>
-      <AppBar position='static' color='primary'>
+      <AppBar position='static' classes={{root: classes.root}}>
         <Toolbar>
           <img src={launcherIcon} className={classes.appIcon}/>
           <Typography variant="title" color="inherit" className={classes.flex}>
@@ -115,7 +100,6 @@ class MenuBar extends React.Component {
 					</Typography>
         </Toolbar>
       </AppBar>
-			</MuiThemeProvider>
     );
   }
 }
@@ -131,5 +115,5 @@ export default connect({
         deleteButtonClicked: signal`deleteButtonClicked`,
        addRockButtonClicked: signal`addRockButtonClicked`
   }, 
-  withStyles(styles, {withTheme: false})(MenuBar)
+  withStyles(styles)(MenuBar)
 );

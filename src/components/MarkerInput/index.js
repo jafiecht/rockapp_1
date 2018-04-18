@@ -14,6 +14,9 @@ import putDown from '../../icons/rock_put_down.png';
 import check from '../../icons/check.png';
 
 const styles = theme => ({
+  root: {
+	  backgroundColor: '#1c313a',
+	},
 	icons: {
     height: 4*theme.spacing.unit,
     width: 4*theme.spacing.unit,
@@ -40,7 +43,8 @@ class MarkerInput extends React.Component {
       <Drawer
         variant="persistent"
 	      anchor="bottom"
-	      open={this.props.editMode}>
+	      open={this.props.editMode}
+				classes={{root: classes.root}}>
         <Toolbar>
           <IconButton
 					  className={classes.buttons}
@@ -77,6 +81,6 @@ export default connect ({
                addComment: signal`addComment`,
 	doneButtonClicked: signal`doneButtonClicked`
   },
-  withStyles()(MarkerInput)
+  withStyles(styles)(MarkerInput)
 );
 
