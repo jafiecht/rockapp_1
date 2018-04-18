@@ -122,7 +122,7 @@ class RockMap extends React.Component {
           dragging={true}
           center={position} 
           ref='map'
-          zoom={'16'}           
+          zoom={'18'}           
           onLocationfound={(e) => this.props.handleLocationFound({lat:e.latlng.lat, lng:e.latlng.lng})}
 					onMoveend={moveEnd}
           >

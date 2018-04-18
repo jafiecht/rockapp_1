@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from 'material-ui/Button';
-import TextField from 'material-ui/TextField';
+import Input, { InputLabel } from 'material-ui/Input';
+import { FormControl, FormHelperText } from 'material-ui/Form';
 import { connect } from '@cerebral/react';
 import { state, signal } from 'cerebral/tags';
 import PropTypes from 'prop-types';
@@ -14,8 +15,19 @@ import putDown from '../../icons/rock_put_down.png';
 import check from '../../icons/check.png';
 
 const styles = theme => ({
-  root: {
+  paper: {
 	  backgroundColor: '#1c313a',
+	},
+	label: {
+	  color: '#ffffff',
+	},
+	underline: {
+	  '&:before':{
+		  backgroundColor: '#ffffff',
+		},
+	  '&:after': {
+	    backgroundColor: '#ffffff',
+		},
 	},
 	icons: {
     height: 4*theme.spacing.unit,
@@ -44,19 +56,28 @@ class MarkerInput extends React.Component {
         variant="persistent"
 	      anchor="bottom"
 	      open={this.props.editMode}
-				classes={{root: classes.root}}>
+				classes={{paper: classes.paper}}>
         <Toolbar>
           <IconButton
 					  className={classes.buttons}
 					  onClick={() => this.props.doneButtonClicked({})}>
             <img src={check} className={classes.icons}/>
           </IconButton>
-          <TextField
-						fullWidth
-	          label="Comment Below"
-            value={currock.comment}
-            onChange={(e) => this.props.commentInputTextChanged({value: e.target.value, id: this.props.rockKey }) }
-          />
+
+					<FormControl fullWidth>
+					  <InputLabel classes={{root: classes.label}}>
+						  Comment Here
+						</InputLabel>
+						<Input
+						  classes={{
+							  root: classes.label, 
+								underline: classes.underline,
+							}}
+						  value={currock.comment}
+						  onChange={(e) => this.props.commentInputTextChanged({value: e.target.value, id: this.props.rockKey }) }
+						/>
+					</FormControl>
+
 	        <IconButton
 					  className={classes.buttons}
 	          onClick={() => this.props.pickButtonClicked({id: this.props.rockKey, picked: !this.props.rockPickStatus})}>
