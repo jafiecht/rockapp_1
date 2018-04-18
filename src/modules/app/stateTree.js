@@ -5,7 +5,8 @@ var stateTree = {
     'data_index': {
     },
     current_location: { lat: '40.428641', lng: '-86.913783' },
-    map_center_location: { lat: '40.428641', lng: '-86.913783' },
+    live_map_center: { lat: '40.428641', lng: '-86.913783' },
+		target_map_center: { lat: '40.428641', lng: '-86.913783' },
     rocks: {}, // { picked: true|false, location: { lat: '40.123', lng: '-86.123' }, comments: '' }
     selected_key: '',
     map_bounds: {},

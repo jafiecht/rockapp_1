@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import uuid from 'uuid';
-import { set, toggle } from 'cerebral/operators';
+import { set, toggle, debounce } from 'cerebral/operators';
 import { props, state } from 'cerebral/tags';
 import { setStorage, getStorage } from '@cerebral/storage/operators';
 
@@ -17,7 +17,6 @@ export const addRockLoc = [
       comment: '',
       location: {lat: props.lat, lng: props.lng}
     })
-    return { id }; // this needs to be in props for showEdit
   },
 ];
 
@@ -36,21 +35,30 @@ export const hidePickedMarker = [
 
 export const getCurrentLocation = [
   ({state,props}) => state.set('model.current_location', { lat: props.lat, lng: props.lng }),
-  set(state`view.current_location_state`, true),
+  //I'm not sure we need the current location available toggle, but I could be wrong.
+	set(state`view.current_location_state`, true),
 ];
 
 export const showCurrentLocation = [
-  set(state`model.map_center_location`, state`model.current_location`),
-  set(state`view.current_location_toggle`, true),
+  //By changing target_map_center, we force our map to redraw. However, if 
+	//the variable hasn't changed since last we set it, the map will not redraw.
+	//Ergo, if we stayed in the same place, but moved the map, we can't force
+	//the map to center on our location. By changing the variable to an abitrary value
+	//for 1 millisecond, we force the map to redraw regardless. 
+  set(state`model.target_map_center`, { lat: 43.64074, lng: -115.993081 }),
+	debounce(1),
+	{
+    continue: [set(state`model.target_map_center`, state`model.current_location`)],
+		discard: [],
+	},
 ];
 
 export const getMapCenter = [
   setMapCenter,
   set(state`model.map_bounds`, props`bounds`),
-  set(state`view.marker_edit_mode`, false),
-	set(state`view.current_location_toggle`, false),
 ];
 
+//This and setBounds below set the map stats at initial mount
 export const initSetMapCenter = [
   setMapCenter,
 ];
@@ -59,12 +67,12 @@ export const setBounds = [
   set(state`model.map_bounds`, props`bounds`),
 ];
 
-export const updateZoom = [
+//I don't think I need zoom tracking...
+/*export const updateZoom = [
   set(state`model.zoom`, props`zoom`),
-];
+];*/
 
 export const inputTextChanged = [
-  //set(state`model.comment_input`, props`value`),
   set(state`model.rocks.${props`id`}.comment`, props`value`)
 ];
 
@@ -84,20 +92,5 @@ export const finishEdit = [
 ];
 
 function setMapCenter({props, state}) {
-  state.set('model.map_center_location', { lat: props.lat, lng: props.lng });
+  state.set('model.live_map_center', { lat: props.lat, lng: props.lng });
 };
-
-/*function setPicked({state, path}) {
-  const selectedRock = state.get('model.selected_key');
-  const picked = state.get('model.rocks'+selectedRock+'.picked');
-  state.set('model.rocks'+selectedRock+'.picked', !picked);
-  state.set('view.rock_pick_state', !picked);
-  return {id: selectedRock}
-};*/
-
-export const importFromCache = [
-  //getStorage('local.rocks'),
-	//function importRocks({props}){
-	//  {props.value ? set(state`model.rocks`, props.value) : null }
-	//}
-];

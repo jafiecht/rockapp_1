@@ -25,10 +25,6 @@ const styles = theme => ({
 
 class App extends React.Component {
 
-  componentWillMount(){
-    this.props.importFromCache()	
-	}
-
   render() {
     const { classes, theme } = this.props;
 
@@ -45,9 +41,7 @@ class App extends React.Component {
 }
 
 export default connect(
-  {
-	  importFromCache: signal`importFromCache`,
-  },
+  {},
   withStyles(styles, { withTheme: true })(App)
 );
   

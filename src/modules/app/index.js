@@ -17,8 +17,7 @@ import { deleteRock } from './chains';
 import { displayDomainModal } from './chains';
 import { initSetMapCenter } from './chains';
 import { finishEdit } from './chains';
-import { updateZoom } from './chains';
-import { importFromCache } from './chains';
+//import { updateZoom } from './chains';
 
 export default Module(m => {
   return {
@@ -39,16 +38,16 @@ export default Module(m => {
       //addComment: addCommentText,
       deleteButtonClicked: deleteRock,
       doneButtonClicked: finishEdit,
-			zoomChange: updateZoom,
-			importFromCache: importFromCache,
+			//zoomChange: updateZoom,
     },
 		modules: {
 		  storage: StorageModule({
         target: localStorage,
 	      json: true,
-	      sync: { 
-				  'model': 'model',
-					'view': 'view',
+	      sync: {
+				  'rocks':'model.rocks',
+				  //'model': 'model',
+					//'view': 'view',
 				},
 	      prefix: 'localStorage',
       })

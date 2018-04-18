@@ -123,12 +123,12 @@ class MenuBar extends React.Component {
 export default connect({
          showAll: state`view.show_all_rocks`,
         editMode: state`view.marker_edit_mode`,
-  centerLocation: state`model.map_center_location`,
+  centerLocation: state`model.live_map_center`,
          rockKey: state`model.selected_key`,
 
   findLocationButtonClicked: signal`currentLocationButtonClicked`,
       hideRockButtonClicked: signal`hideRockButtonClicked`,
-        deleteButtonClicked: signal`deleiteButtonClicked`,
+        deleteButtonClicked: signal`deleteButtonClicked`,
        addRockButtonClicked: signal`addRockButtonClicked`
   }, 
   withStyles(styles, {withTheme: false})(MenuBar)

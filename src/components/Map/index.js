@@ -36,7 +36,6 @@ class RockMap extends React.Component {
     //Get initial center of the map
     const centerLat = this.refs.map.leafletElement.getCenter().lat;
     const centerLng = this.refs.map.leafletElement.getCenter().lng;
-    console.log('this.props = ', this.props);
     this.props.initSetCenter({lat:centerLat, lng:centerLng});
 		
     //Get initial bounds of the map
@@ -46,9 +45,11 @@ class RockMap extends React.Component {
 
   render() {
     const { classes, theme } = this.props;
-
-		const stateTreeLatitude = this.props.centerLocation.lat;
-		const stateTreeLongitude = this.props.centerLocation.lng;
+   
+	  //Set our Map center
+		const targetLatitude = this.props.targetCenter.lat;
+		const targetLongitude = this.props.targetCenter.lng;
+    const targetPosition = [targetLatitude, targetLongitude];
 
     //Add Current Location Marker
     const currentMarker = [];
@@ -83,8 +84,9 @@ class RockMap extends React.Component {
       iconAnchor: [18, 50] 	     
     });
 
-    const position = [stateTreeLatitude, stateTreeLongitude];
-
+    const position = [targetLatitude, targetLongitude];
+    
+		//This method works, but markers with 0.0 opacity are still clickable. Bummer.
     const rockMarkers= [];
     if (this.props.rocks) {
       _.map(this.props.rocks, (rock,key) => {
@@ -97,12 +99,13 @@ class RockMap extends React.Component {
             onDragEnd={(e) => this.props.markerDragged({id: key, lat: e.target._latlng.lat, lng: e.target._latlng.lng})}
             onClick={(e) => this.props.rockClicked({id: key})}
             opacity={this.props.showAll || (!this.props.showAll && !rock.picked) ? 1.0 : 0.0}
-          >
+         >
           </Marker>
         );
       });  
     }
-      
+ 
+    //This allows for tracking of map position
     const moveEnd = () => {
       if (!this.refs.map) return;
       this.props.mapDragged({
@@ -117,11 +120,11 @@ class RockMap extends React.Component {
       <div className={classes.map}>
         <Map
           dragging={true}
-          center={(this.props.currentToggle) ? this.props.centerLocation : position} 
+          center={position} 
           ref='map'
           zoom={'16'}           
           onLocationfound={(e) => this.props.handleLocationFound({lat:e.latlng.lat, lng:e.latlng.lng})}
-          onMoveend={moveEnd}
+					onMoveend={moveEnd}
           >
           <TileLayer
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
@@ -145,9 +148,9 @@ export default connect({
            rocks: state`model.rocks`,
          showAll: state`view.show_all_rocks`,
       currentLoc: state`model.current_location`,
-   currentToggle: state`view.current_location_toggle`,
-  centerLocation: state`model.map_center_location`,
-	     zoomLevel: state`model.zoom`,
+   //currentToggle: state`view.current_location_toggle`,
+  targetCenter: state`model.target_map_center`,
+	     //zoomLevel: state`model.zoom`,
 
                  markerDragged: signal`markerDragged`,
            handleLocationFound: signal`handleLocationFound`,
