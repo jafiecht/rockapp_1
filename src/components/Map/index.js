@@ -31,6 +31,7 @@ const styles = theme => ({
 });
 
 class RockMap extends React.Component {
+
   componentDidMount() {
     this.refs.map.leafletElement.locate()
     //Get initial center of the map
@@ -73,7 +74,7 @@ class RockMap extends React.Component {
       );
     }
       
-    //Draw the rock markers
+    //Create the rock Markers
     const unpickedRock = Leaflet.icon({
       iconUrl: rockIcon,
       iconAnchor: [18, 50]
@@ -86,22 +87,29 @@ class RockMap extends React.Component {
 
     const position = [targetLatitude, targetLongitude];
     
-		//This method works, but markers with 0.0 opacity are still clickable. Bummer.
+		//This section handles what rockmarkers are mapped, what they look like, and when.
+		const assembleMarkerArray = (rock, key) => {
+		//Selectivly chooses what rocks to render based on current state
+		  if(rock.picked && !this.props.showAll || this.props.editing && key != this.props.currentKey){
+			} else {
+			  rockMarkers.push(
+				  <Marker
+					  key={key}
+						position={[rock.location.lat, rock.location.lng]}
+						draggable={true}
+						icon={(rock.picked) ? pickedRock : unpickedRock}
+						onDragEnd={(e) => this.props.markerDragged({id: key, lat: e.target._latlng.lat, lng: e.target._latlng.lng})}
+            onClick={(e) => this.props.rockClicked({id: key})} 
+         >
+          </Marker>
+				);
+			}
+		}
+
     const rockMarkers= [];
     if (this.props.rocks) {
       _.map(this.props.rocks, (rock,key) => {
-        rockMarkers.push(
-          <Marker
-            key={key}
-            position={[rock.location.lat, rock.location.lng]}
-            draggable={true}
-            icon={(rock.picked) ? pickedRock : unpickedRock}
-            onDragEnd={(e) => this.props.markerDragged({id: key, lat: e.target._latlng.lat, lng: e.target._latlng.lng})}
-            onClick={(e) => this.props.rockClicked({id: key})}
-            opacity={this.props.showAll || (!this.props.showAll && !rock.picked) ? 1.0 : 0.0}
-         >
-          </Marker>
-        );
+        assembleMarkerArray(rock, key)
       });  
     }
  
@@ -120,7 +128,7 @@ class RockMap extends React.Component {
       <div className={classes.map}>
         <Map
           dragging={true}
-          center={position} 
+          center={targetPosition} 
           ref='map'
           zoom={'18'}           
           onLocationfound={(e) => this.props.handleLocationFound({lat:e.latlng.lat, lng:e.latlng.lng})}
@@ -145,12 +153,14 @@ RockMap.propTypes = {
 };
 
 export default connect({
-           rocks: state`model.rocks`,
-         showAll: state`view.show_all_rocks`,
-      currentLoc: state`model.current_location`,
-   //currentToggle: state`view.current_location_toggle`,
-  targetCenter: state`model.target_map_center`,
-	     //zoomLevel: state`model.zoom`,
+          rocks: state`model.rocks`,
+        showAll: state`view.show_all_rocks`,
+     currentLoc: state`model.current_location`,
+  //currentToggle: state`view.current_location_toggle`,
+   targetCenter: state`model.target_map_center`,
+	    //zoomLevel: state`model.zoom`,
+		editing: state`view.marker_edit_mode`,
+		currentKey: state`model.selected_key`,
 
                  markerDragged: signal`markerDragged`,
            handleLocationFound: signal`handleLocationFound`,

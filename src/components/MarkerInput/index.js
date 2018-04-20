@@ -37,6 +37,10 @@ const styles = theme => ({
 	  marginLeft: theme.spacing.unit,
 		marginRight: theme.spacing.unit,
 	},
+	root: {
+	  color: '#ffffff',
+		backgroundColor: '#718792',
+	},
 });
 
 class MarkerInput extends React.Component {
@@ -78,11 +82,13 @@ class MarkerInput extends React.Component {
 						/>
 					</FormControl>
 
-	        <IconButton
+	        <Button
+					  variant="raised"
 					  className={classes.buttons}
+						classes={{root: classes.root}}
 	          onClick={() => this.props.pickButtonClicked({id: this.props.rockKey, picked: !this.props.rockPickStatus})}>
-            <img src={this.props.rockPickStatus ? putDown : pickUp} className={classes.icons}/>
-          </IconButton>
+            {this.props.rockPickStatus ? 'Put Down' : 'Pick Up'}
+          </Button>
         </Toolbar>
       </Drawer>
     );
