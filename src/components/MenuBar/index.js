@@ -19,25 +19,41 @@ const styles = theme => ({
 		backgroundColor: '#1c313a',
 	},
 	flex: {
-    flex: 1,
-  },
-  appbar: {
-    //color: theme.pallete.primary.main,
-    //height: 8*theme.spacing.unit,
-  },
+	  flex: 1,
+	},
 	appIcon: {
-    marginLeft: -1.5*theme.spacing.unit,
-    marginRight: 1.5*theme.spacing.unit,
-		width: 6*theme.spacing.unit,
-		height: 6*theme.spacing.unit,
+	  [theme.breakpoints.up('xs')]: {
+      marginLeft: -1.5*theme.spacing.unit,
+      marginRight: 1.5*theme.spacing.unit,
+		  width: 6*theme.spacing.unit,
+		  height: 6*theme.spacing.unit,
+		},
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: -1*theme.spacing.unit,
+      marginRight: 1*theme.spacing.unit,
+		  width: 5*theme.spacing.unit,
+		  height: 5*theme.spacing.unit,
+		},
   },
 	icon: {
-    width: 5*theme.spacing.unit,
-		height: 5*theme.spacing.unit,
+    [theme.breakpoints.up('xs')]: {
+      width: 5*theme.spacing.unit,
+		  height: 5*theme.spacing.unit,
+	  },
+    [theme.breakpoints.down('xs')]: {
+		  width: 4*theme.spacing.unit,
+		  height: 4*theme.spacing.unit,
+		},
   },
   button: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+	  [theme.breakpoints.up('xs')]: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+		},
+	  [theme.breakpoints.down('xs')]: {
+      marginLeft: 0*theme.spacing.unit,
+      marginRight: 0*theme.spacing.unit,
+		}, 
   },
 });
 
@@ -92,7 +108,7 @@ class MenuBar extends React.Component {
       <AppBar position='static' classes={{root: classes.root}}>
         <Toolbar>
           <img src={launcherIcon} className={classes.appIcon}/>
-          <Typography variant="title" color="inherit" className={classes.flex}>
+          <Typography variant='title' color="inherit" className={classes.flex}>
             RockApp
           </Typography>
 					<Typography>
