@@ -16,44 +16,44 @@ import deleteIcon from './../../icons/delete.png';
 
 const styles = theme => ({
   root: {
-		backgroundColor: '#1c313a',
-	},
-	flex: {
-	  flex: 1,
-	},
-	appIcon: {
-	  [theme.breakpoints.up('xs')]: {
+    backgroundColor: '#1c313a',
+  },
+  flex: {
+    flex: 1,
+  },
+  appIcon: {
+    [theme.breakpoints.up('xs')]: {
       marginLeft: -1.5*theme.spacing.unit,
       marginRight: 1.5*theme.spacing.unit,
-		  width: 6*theme.spacing.unit,
-		  height: 6*theme.spacing.unit,
-		},
+      width: 6*theme.spacing.unit,
+      height: 6*theme.spacing.unit,
+    },
     [theme.breakpoints.down('xs')]: {
       marginLeft: -1*theme.spacing.unit,
       marginRight: 1*theme.spacing.unit,
-		  width: 5*theme.spacing.unit,
-		  height: 5*theme.spacing.unit,
-		},
+      width: 5*theme.spacing.unit,
+      height: 5*theme.spacing.unit,
+    },
   },
-	icon: {
+  icon: {
     [theme.breakpoints.up('xs')]: {
       width: 5*theme.spacing.unit,
-		  height: 5*theme.spacing.unit,
-	  },
+      height: 5*theme.spacing.unit,
+    },
     [theme.breakpoints.down('xs')]: {
-		  width: 4*theme.spacing.unit,
-		  height: 4*theme.spacing.unit,
-		},
+      width: 4*theme.spacing.unit,
+      height: 4*theme.spacing.unit,
+    },
   },
   button: {
-	  [theme.breakpoints.up('xs')]: {
+    [theme.breakpoints.up('xs')]: {
       marginLeft: theme.spacing.unit,
       marginRight: theme.spacing.unit,
-		},
-	  [theme.breakpoints.down('xs')]: {
+    },
+    [theme.breakpoints.down('xs')]: {
       marginLeft: 0*theme.spacing.unit,
       marginRight: 0*theme.spacing.unit,
-		}, 
+    }, 
   },
 });
 
@@ -111,9 +111,9 @@ class MenuBar extends React.Component {
           <Typography variant='title' color="inherit" className={classes.flex}>
             RockApp
           </Typography>
-					<Typography>
+          <Typography>
             {icons}
-					</Typography>
+          </Typography>
         </Toolbar>
       </AppBar>
     );

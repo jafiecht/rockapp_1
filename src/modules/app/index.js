@@ -18,6 +18,8 @@ import { displayDomainModal } from './chains';
 import { initSetMapCenter } from './chains';
 import { finishEdit } from './chains';
 //import { updateZoom } from './chains';
+import { initialize } from './chains';
+
 
 export default Module(m => {
   return {
@@ -38,19 +40,21 @@ export default Module(m => {
       //addComment: addCommentText,
       deleteButtonClicked: deleteRock,
       doneButtonClicked: finishEdit,
-			//zoomChange: updateZoom,
+      //zoomChange: updateZoom,
+      initialize: initialize,
     },
-		modules: {
-		  storage: StorageModule({
+
+    /*modules: {
+      storage: StorageModule({
         target: localStorage,
-	      json: true,
-	      sync: {
-				  'rocks':'model.rocks',
-				  //'model': 'model',
-					//'view': 'view',
-				},
-	      prefix: 'localStorage',
+	json: true,
+	sync: {
+          'rocks':'model.rocks',
+          //'model': 'model',
+          //'view': 'view',
+        },
+        prefix: 'localStorage',
       })
-		},
+    },*/
   };
 });
