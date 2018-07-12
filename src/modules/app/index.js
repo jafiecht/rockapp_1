@@ -1,6 +1,8 @@
 import { Module } from 'cerebral';
 import stateTree from './stateTree.js';
 import StorageModule from '@cerebral/storage';
+import oada from '../../providers/oada';
+import oadaMod from '../../modules/oada';
 
 import { addRockLoc } from './chains';
 import { setNewRockLoc } from './chains';
@@ -43,7 +45,12 @@ export default Module(m => {
       //zoomChange: updateZoom,
       initialize: initialize,
     },
-
+    modules: {
+      oada: oadaMod
+    },
+    providers :{
+      oada
+    },
     /*modules: {
       storage: StorageModule({
         target: localStorage,

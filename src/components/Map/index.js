@@ -24,9 +24,9 @@ const styles = theme => ({
   },
   map: {
     position: 'relative',
-		display: 'flex',
-		width: '100%',
-		height: '100%',
+    display: 'flex',
+    width: '100%',
+    height: '100%',
   },
 });
 
@@ -47,9 +47,9 @@ class RockMap extends React.Component {
   render() {
     const { classes, theme } = this.props;
    
-	  //Set our Map center
-		const targetLatitude = this.props.targetCenter.lat;
-		const targetLongitude = this.props.targetCenter.lng;
+    //Set our Map center
+    const targetLatitude = this.props.targetCenter.lat;
+    const targetLongitude = this.props.targetCenter.lng;
     const targetPosition = [targetLatitude, targetLongitude];
 
     //Add Current Location Marker
@@ -87,24 +87,24 @@ class RockMap extends React.Component {
 
     const position = [targetLatitude, targetLongitude];
     
-		//This section handles what rockmarkers are mapped, what they look like, and when.
-		const assembleMarkerArray = (rock, key) => {
-		//Selectivly chooses what rocks to render based on current state
-		  if(rock.picked && !this.props.showAll || this.props.editing && key != this.props.currentKey){
-			} else {
-			  rockMarkers.push(
-				  <Marker
-					  key={key}
-						position={[rock.location.lat, rock.location.lng]}
-						draggable={true}
-						icon={(rock.picked) ? pickedRock : unpickedRock}
-						onDragEnd={(e) => this.props.markerDragged({id: key, lat: e.target._latlng.lat, lng: e.target._latlng.lng})}
+    //This section handles what rockmarkers are mapped, what they look like, and when.
+    const assembleMarkerArray = (rock, key) => {
+      //Selectivly chooses what rocks to render based on current state
+      if(rock.picked && !this.props.showAll || this.props.editing && key != this.props.currentKey){
+      } else {
+        rockMarkers.push(
+          <Marker
+            key={key}
+            position={[rock.location.lat, rock.location.lng]}
+            draggable={this.props.editing ? false : true}
+            icon={(rock.picked) ? pickedRock : unpickedRock}
+            onDragEnd={(e) => this.props.markerDragged({id: key, lat: e.target._latlng.lat, lng: e.target._latlng.lng})}
             onClick={(e) => this.props.rockClicked({id: key})} 
-         >
+          >
           </Marker>
-				);
-			}
-		}
+        );
+      }
+    }
 
     const rockMarkers= [];
     if (this.props.rocks) {
@@ -132,8 +132,8 @@ class RockMap extends React.Component {
           ref='map'
           zoom={'18'}           
           onLocationfound={(e) => this.props.handleLocationFound({lat:e.latlng.lat, lng:e.latlng.lng})}
-					onMoveend={moveEnd}
-          >
+          onMoveend={moveEnd}
+        >
           <TileLayer
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
