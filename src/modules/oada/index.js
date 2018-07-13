@@ -1,8 +1,10 @@
 import { Module } from 'cerebral'
 import * as signals from './sequences'
-
+import oada from './../../providers/index.js'
 
 export default Module ({
+
+  providers: { oada },
 
 	state: {
 		bookmarks: {},

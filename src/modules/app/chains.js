@@ -11,7 +11,9 @@ var Promise = require('bluebird');
 //So, since this is an early work of mine, pretty much everything 
 //happens here in Chains. Sorry about that:(
 
-//Define our fetch function, which I think is important
+const = setupTree: {'*':{}}
+
+/*//Define our fetch function, which I think is important
 export const fetch = [
   ({props}) => ({
     path: '/bookmarks/rocks',
@@ -30,7 +32,7 @@ export const fetch = [
       oada.createResourceAndLink
     ],
   },
-]
+]*/
 
 function mapOadaToRecords({state, props}) {
   state.set('model.rocks', {});
@@ -57,8 +59,9 @@ export const addRockLoc = [
     path: 'bookmarks/rocks/',
     linkToId: true
   }),
-  oada.createResourceAndLink,
-  fetch,
+  //oada.createResourceAndLink,
+  //fetch,
+  oada.put
 ];
 
 function createRock({props, state}) {
@@ -151,7 +154,7 @@ export const deleteRock = [
   oada.oadaDelete,
   set(state`view.marker_edit_mode`, false),
   set(state`model.selected_key`, ''),
-  fetch,
+  //fetch,
   mapOadaToRecords,
 ];
 
@@ -178,9 +181,9 @@ export const finishEdit = [
 
 //When the app boots up, we'll load all the rock data in our database
 export const initialize = [
-  oada.init,
-  fetch,
-  oada.configureCache,
+  //oada.connect,
+  //fetch,
+  //oada.configureCache,
   //oada.configureWS,
 ];
 
