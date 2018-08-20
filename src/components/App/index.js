@@ -1,12 +1,18 @@
+//This is the root component (more or less). A bit of 
+//page layout is handle, but it mostly just calls
+//children components
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import { connect } from '@cerebral/react';
 import { signal } from 'cerebral/tags';
 
 import MenuBar from '../MenuBar/';
 import MapContainer from '../Map/';
 import MarkerInput from '../MarkerInput/';
+import ManageConnections from '../ManageConnections/';
+import OadaInstructions from '../OadaInstructions/';
+import HowToUse1 from '../HowToUse1/';
+import HowToUse2 from '../HowToUse2/';
 
 const styles = theme => ({
   app: {
@@ -26,11 +32,11 @@ const styles = theme => ({
 class App extends React.Component {
 
   componentWillMount() {
-    this.props.initialize({});
+   this.props.initialize({});
   }
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes } = this.props;
 
     return (   
       <div className={classes.app}>
@@ -38,6 +44,10 @@ class App extends React.Component {
         <div className={classes.mapPanel}>
           <MapContainer/>
           <MarkerInput/>
+          <ManageConnections/>
+          <OadaInstructions/>
+          <HowToUse1/>
+          <HowToUse2/>
         </div>
       </div>
     );

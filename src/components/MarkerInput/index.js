@@ -1,17 +1,20 @@
+//This component renders a editing bar at the bottom
+//of the app. There, the user edits rocks.
 import React from 'react';
-import Button from 'material-ui/Button';
-import Input, { InputLabel } from 'material-ui/Input';
-import { FormControl, FormHelperText } from 'material-ui/Form';
+import PropTypes from 'prop-types';
+
 import { connect } from '@cerebral/react';
 import { state, signal } from 'cerebral/tags';
-import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Drawer from 'material-ui/Drawer';
-import Toolbar from 'material-ui/Toolbar';
-import IconButton from 'material-ui/IconButton';
-//import './marker-input.css';
-import pickUp from '../../icons/rock_pick_up.png';
-import putDown from '../../icons/rock_put_down.png';
+
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+
 import check from '../../icons/check.png';
 
 const styles = theme => ({
@@ -19,14 +22,14 @@ const styles = theme => ({
     backgroundColor: '#1c313a',
   },
   label: {
-    color: '#ffffff',
+    color: '#ffffff'
   },
   underline: {
     '&:before':{
-      backgroundColor: '#ffffff',
+      "border-bottom-color": '#ffffff',
     },
     '&:after': {
-      backgroundColor: '#ffffff',
+      "border-bottom-color": '#ffffff',
     },
   },
   icons: {
@@ -46,12 +49,11 @@ const styles = theme => ({
 class MarkerInput extends React.Component {
 
   static propTypes = {
-    theme: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired,
 	};
 
   render() {
-    const {classes, theme } = this.props;
+    const {classes } = this.props;
 
     const currock = (this.props.rocks && this.props.rockKey) ? this.props.rocks[this.props.rockKey] : { comment: '' };
 
@@ -62,32 +64,29 @@ class MarkerInput extends React.Component {
         open={this.props.editMode}
         classes={{paper: classes.paper}}>
         <Toolbar>
-
           <IconButton
             className={classes.buttons}
-            onClick={() => this.props.doneButtonClicked({id: this.props.rockKey})}>
-              <img src={check} className={classes.icons}/>
+            onClick={() => this.props.finishEditing({id: this.props.rockKey})}>
+              <img src={check} className={classes.icons} alt=''/>
           </IconButton>
-
           <FormControl fullWidth>
-            <InputLabel classes={{root: classes.label}}>
+            <FormHelperText classes={{root: classes.label}}>
               Comment Here
-            </InputLabel>
+            </FormHelperText>
             <Input
               classes={{
-                root: classes.label, 
-                underline: classes.underline,
+                root: classes.label,
+                underline: classes.underline 
               }}
               value={currock.comment}
-              onChange={(e) => this.props.commentInputTextChanged({value: e.target.value, id: this.props.rockKey }) }
+              onChange={(e) => this.props.trackInputText({value: e.target.value, id: this.props.rockKey }) }
             />
           </FormControl>
- 
           <Button
             variant="raised"
             className={classes.buttons}
             classes={{root: classes.root}}
-            onClick={() => this.props.pickButtonClicked({id: this.props.rockKey, picked: !currock.picked})}>
+            onClick={() => this.props.togglePickedStatus({id: this.props.rockKey, picked: !currock.picked})}>
             {currock.picked ? 'Put Down' : 'Pick Up'}
           </Button>
         </Toolbar>
@@ -98,15 +97,14 @@ class MarkerInput extends React.Component {
    
   
 export default connect ({
-         rockKey: state`model.selected_key`,
-           rocks: state`model.rocks`,
-        editMode: state`view.marker_edit_mode`,
-    commentValue: state`model.comment_input`,
+         rockKey: state`session.selected_key`,
+           rocks: state`rocks.records`,
+        editMode: state`session.marker_edit_mode`,
+    commentValue: state`session.comment_input`,
 
-        pickButtonClicked: signal`pickButtonClicked`,
-  commentInputTextChanged: signal`commentInputTextChanged`,
-               addComment: signal`addComment`,
-	doneButtonClicked: signal`doneButtonClicked`
+  togglePickedStatus: signal`session.togglePickedStatus`,
+      trackInputText: signal`session.trackInputText`,
+	     finishEditing: signal`rocks.finishEditing`
   },
   withStyles(styles)(MarkerInput)
 );

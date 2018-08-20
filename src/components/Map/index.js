@@ -5,13 +5,10 @@ import {state, signal} from 'cerebral/tags';
 import uuid from 'uuid';
 import Leaflet from 'leaflet';
 import { Map, Marker, CircleMarker, TileLayer } from 'react-leaflet';
-import Paper from 'material-ui/Paper';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
 
 import './Map.css';
-import MarkerInput from '../MarkerInput';
 import rockIcon from '../../icons/rock.png';
 import pickedRockIcon from '../../icons/pickedRock.png';
 
@@ -34,18 +31,17 @@ class RockMap extends React.Component {
 
   componentDidMount() {
     this.refs.map.leafletElement.locate()
-    //Get initial center of the map
-    const centerLat = this.refs.map.leafletElement.getCenter().lat;
-    const centerLng = this.refs.map.leafletElement.getCenter().lng;
-    this.props.initSetCenter({lat:centerLat, lng:centerLng});
-		
-    //Get initial bounds of the map
-    const bounds = this.refs.map.leafletElement.getBounds();
-    this.props.boundsFound({bounds: bounds});
+	 	
+    //We track leaflet state to use in the react app  
+    this.props.trackMapPosition({
+      lat: this.refs.map.leafletElement.getCenter().lat,
+      lng: this.refs.map.leafletElement.getCenter().lng,
+      bounds: this.refs.map.leafletElement.getBounds()
+    });
   }    
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes } = this.props;
    
     //Set our Map center
     const targetLatitude = this.props.targetCenter.lat;
@@ -54,25 +50,31 @@ class RockMap extends React.Component {
 
     //Add Current Location Marker
     const currentMarker = [];
-    const currentPosition = this.props.currentLoc
-      ? [this.props.currentLoc.lat, this.props.currentLoc.lng]
-      : [40.1234, -86.12342];
+    var currentPosition = [];
+    if (this.props.current_location_state) {
+      currentPosition = [
+        this.props.currentLoc.lat, 
+        this.props.currentLoc.lng
+      ]
+    } else {
+      currentPosition = [
+        40.1234, 
+        -86.12342
+      ]
+    };
         
-    if (currentPosition[0]) {
-      currentMarker.push(
-        <CircleMarker
-          key={uuid.v4}
-          center={currentPosition}
-          radius={8}
-          opacity={1.0}
-          color={"white"}
-          weight={2}
-          fillColor={'#0080ff'}
-          fillOpacity={0.8}
-        >
-        </CircleMarker>
-      );
-    }
+    currentMarker.push(
+      <CircleMarker
+        key={uuid.v4}
+        center={currentPosition}
+        radius={8}
+        opacity={1.0}
+        color={"white"}
+        weight={2}
+        fillColor={'#0080ff'}
+        fillOpacity={0.8}>
+      </CircleMarker>
+    );
       
     //Create the rock Markers
     const unpickedRock = Leaflet.icon({
@@ -85,12 +87,12 @@ class RockMap extends React.Component {
       iconAnchor: [18, 50] 	     
     });
 
-    const position = [targetLatitude, targetLongitude];
-    
     //This section handles what rockmarkers are mapped, what they look like, and when.
     const assembleMarkerArray = (rock, key) => {
       //Selectivly chooses what rocks to render based on current state
-      if(rock.picked && !this.props.showAll || this.props.editing && key != this.props.currentKey){
+      if (rock.picked && !this.props.showAll){
+      } else if (this.props.editing && key !== this.props.currentKey) {
+      } else if (!rock.location) {
       } else {
         rockMarkers.push(
           <Marker
@@ -98,8 +100,8 @@ class RockMap extends React.Component {
             position={[rock.location.lat, rock.location.lng]}
             draggable={this.props.editing ? false : true}
             icon={(rock.picked) ? pickedRock : unpickedRock}
-            onDragEnd={(e) => this.props.markerDragged({id: key, lat: e.target._latlng.lat, lng: e.target._latlng.lng})}
-            onClick={(e) => this.props.rockClicked({id: key})} 
+            onDragEnd={(e) => this.props.resetRockLocation({id: key, lat: e.target._latlng.lat, lng: e.target._latlng.lng})}
+            onClick={(e) => this.props.startEditing({id: key})} 
           >
           </Marker>
         );
@@ -114,9 +116,9 @@ class RockMap extends React.Component {
     }
  
     //This allows for tracking of map position
-    const moveEnd = () => {
+    const moveEnd = () => { 
       if (!this.refs.map) return;
-      this.props.mapDragged({
+      this.props.trackMapPosition({
         lat: this.refs.map.leafletElement.getCenter().lat,
         lng: this.refs.map.leafletElement.getCenter().lng,
         bounds: this.refs.map.leafletElement.getBounds()
@@ -130,8 +132,8 @@ class RockMap extends React.Component {
           dragging={true}
           center={targetPosition} 
           ref='map'
-          zoom={'18'}           
-          onLocationfound={(e) => this.props.handleLocationFound({lat:e.latlng.lat, lng:e.latlng.lng})}
+          zoom={18}           
+          onLocationfound={(e) => this.props.storeUserLocation({lat:e.latlng.lat, lng:e.latlng.lng})}
           onMoveend={moveEnd}
         >
           <TileLayer
@@ -153,23 +155,18 @@ RockMap.propTypes = {
 };
 
 export default connect({
-          rocks: state`model.rocks`,
-        showAll: state`view.show_all_rocks`,
-     currentLoc: state`model.current_location`,
-  //currentToggle: state`view.current_location_toggle`,
-   targetCenter: state`model.target_map_center`,
-	    //zoomLevel: state`model.zoom`,
-		editing: state`view.marker_edit_mode`,
-		currentKey: state`model.selected_key`,
+                   rocks: state`rocks.records`,
+                 showAll: state`session.show_all_rocks`,
+              currentLoc: state`session.current_location`,
+  current_location_state: state`session.current_location_state`,
+            targetCenter: state`session.target_map_center`,
+		             editing: state`session.marker_edit_mode`,
+		          currentKey: state`session.selected_key`,
 
-                 markerDragged: signal`markerDragged`,
-           handleLocationFound: signal`handleLocationFound`,
-                    mapDragged: signal`mapDragged`,
-  currentLocationButtonClicked: signal`currentLocationButtonClicked`,
-                   rockClicked: signal`rockClicked`,
-                   boundsFound: signal`boundsFound`,
-                 initSetCenter: signal`initSetCenter`,
-							handleZoomChange: signal`zoomChange`,
+  resetRockLocation: signal`rocks.resetRockLocation`,
+  storeUserLocation: signal`session.storeUserLocation`,
+   trackMapPosition: signal`session.trackMapPosition`,
+       startEditing: signal`session.startEditing`,
   },
   withStyles(styles, { withTheme: true })(RockMap)
 );
